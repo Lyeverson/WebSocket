@@ -21,8 +21,8 @@ async def handler(websocket, path):
         # Remover o cliente desconectado da lista
         connected_clients.remove(websocket)
 
-# Iniciar o servidor WebSocket
-start_server = websockets.serve(handler, "0.0.0.0", 12345)
+async def main():
+    # Iniciar o servidor WebSocket
+    print("Iniciando servidor WebSocket...")
+    async with websockets.
 
-# Executar o servidor
-asyncio.run(start_server)
