@@ -10,8 +10,11 @@ async def handler(websocket, path):
     except websockets.ConnectionClosed:
         print("Cliente desconectado")
 
-start_server = websockets.serve(handler, "0.0.0.0", 12345)
+async def main():
+    async with websockets.serve(handler, "0.0.0.0", 12345):
+        print("Servidor WebSocket rodando na porta 12345...")
+        await asyncio.Future()  # Mantém o servidor rodando
 
-print("Servidor WebSocket rodando...")
-asyncio.get_event_loop().run_until_complete(start_server)
-asyncio.get_event_loop().run_forever()
+# Inicializa o loop de eventos e executa o servidor
+if __name__ == "__main__":
+    asyncio.run(main())
