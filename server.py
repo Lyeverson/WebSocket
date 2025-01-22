@@ -4,7 +4,7 @@ import websockets
 # Lista para manter as conexões ativas
 connected_clients = set()
 
-async def handler(websocket, path):
+async def handler(websocket, path):  # Inclui o argumento 'path'
     # Adicionar o cliente conectado à lista
     connected_clients.add(websocket)
     print("Novo cliente conectado.")
