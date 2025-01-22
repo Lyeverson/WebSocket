@@ -24,5 +24,9 @@ async def handler(websocket, path):
 async def main():
     # Iniciar o servidor WebSocket
     print("Iniciando servidor WebSocket...")
-    async with websockets.
+    async with websockets.serve(handler, "0.0.0.0", 12345):
+        await asyncio.Future()  # Mantém o servidor rodando indefinidamente
 
+# Criação explícita do loop de eventos
+if __name__ == "__main__":
+    asyncio.run(main())
