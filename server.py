@@ -1,20 +1,28 @@
 import asyncio
 import websockets
 
+# Lista para manter as conexões ativas
+connected_clients = set()
+
 async def handler(websocket, path):
-    print("Novo cliente conectado!")
+    # Adicionar o cliente conectado à lista
+    connected_clients.add(websocket)
+    print("Novo cliente conectado.")
     try:
         async for message in websocket:
             print(f"Mensagem recebida: {message}")
-            await websocket.send(f"Mensagem ecoada: {message}")
-    except websockets.ConnectionClosed:
-        print("Cliente desconectado")
+            # Reencaminhar a mensagem para todos os outros clientes conectados
+            for client in connected_clients:
+                if client != websocket:
+                    await client.send(message)
+    except websockets.exceptions.ConnectionClosed as e:
+        print(f"Conexão fechada: {e}")
+    finally:
+        # Remover o cliente desconectado da lista
+        connected_clients.remove(websocket)
 
-async def main():
-    async with websockets.serve(handler, "0.0.0.0", 12345):
-        print("Servidor WebSocket rodando na porta 12345...")
-        await asyncio.Future()  # Mantém o servidor rodando
+# Iniciar o servidor WebSocket
+start_server = websockets.serve(handler, "0.0.0.0", 12345)
 
-# Inicializa o loop de eventos e executa o servidor
-if __name__ == "__main__":
-    asyncio.run(main())
+# Executar o servidor
+asyncio.run(start_server)
